@@ -567,7 +567,7 @@
             margin-top: 20px;
         }
 
-        /* Update Notification Modal */
+        /* Update Notification Modal (existing) */
         .update-modal {
             display: none;
             position: fixed;
@@ -582,11 +582,26 @@
             animation: fadeIn 0.3s;
         }
 
-        .update-modal-content {
+        /* New download flow modal with higher z-index */
+        .download-flow-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
             background-color: var(--card-color);
             border-radius: 15px;
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             transform: scale(0.9);
@@ -594,7 +609,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .update-modal-header {
+        .modal-header {
             padding: 15px;
             background: var(--gradient);
             color: white;
@@ -602,12 +617,12 @@
             position: relative;
         }
 
-        .update-modal-header h2 {
+        .modal-header h2 {
             font-size: 20px;
             margin: 0;
         }
 
-        .close-update-modal {
+        .close-modal {
             position: absolute;
             top: 12px;
             right: 15px;
@@ -616,35 +631,39 @@
             transition: var(--transition);
         }
 
-        .close-update-modal:hover {
+        .close-modal:hover {
             transform: rotate(90deg);
         }
 
-        .update-modal-body {
-            padding: 20px;
+        .modal-body {
+            padding: 25px;
             text-align: center;
         }
 
-        .update-modal-body p {
+        .modal-body p {
             font-size: 16px;
-            line-height: 1.7;
+            line-height: 1.6;
             margin-bottom: 15px;
-            color: var(--text-color);
         }
 
-        .update-modal-body .highlight {
-            background-color: rgba(18, 140, 126, 0.1);
-            padding: 10px 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-            margin: 15px 0;
-            font-family: monospace;
-            font-size: 14px;
+        .features-list {
             text-align: left;
-            color: var(--secondary-color);
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
         }
 
-        .ok-btn {
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
             display: inline-block;
             background: var(--gradient);
             color: white;
@@ -656,12 +675,32 @@
             transition: var(--transition);
             border: none;
             cursor: pointer;
-            margin-top: 10px;
+            min-width: 120px;
+            border: 1px solid transparent;
         }
 
-        .ok-btn:hover {
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .modal-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(18, 140, 126, 0.4);
+        }
+
+        .highlight {
+            background-color: rgba(18, 140, 126, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            color: var(--secondary-color);
+            direction: ltr;
         }
 
         @keyframes fadeIn {
@@ -763,20 +802,33 @@
     </style>
 </head>
 <body>
-    <!-- Update Notification Modal - Updated message in Arabic -->
+    <!-- Update Modal (first message on entry) -->
     <div class="update-modal" id="updateModal">
-        <div class="update-modal-content">
-            <div class="update-modal-header">
-                <h2>إشعار هام</h2>
-                <span class="close-update-modal" id="closeUpdateModal">&times;</span>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تحديث مهم لكل المستخدمين</h2>
+                <span class="close-modal" id="closeUpdateModal">&times;</span>
             </div>
-            <div class="update-modal-body">
+            <div class="modal-body">
                 <p>عفوا نتأسف لكل أعضاء واتساب لكن تم ايقاف تحديث باقي الاصدارات من واتساب وهي:</p>
                 <div class="highlight">com.ios.whatsapp<br>com.whatsapp.prim</div>
                 <p>والإصدار الذي سيتم العمل عليه دائما هو:</p>
                 <div class="highlight">com.sathwbg.easymassager</div>
                 <p>شكرا لتفهمكم</p>
-                <button class="ok-btn" id="okUpdateBtn">موافق</button>
+                <button class="modal-btn" id="okUpdateBtn">موافق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Download Flow Modal -->
+    <div class="download-flow-modal" id="downloadFlowModal">
+        <div class="modal-content" id="downloadModalContent">
+            <div class="modal-header">
+                <h2 id="flowModalHeader">تنزيل واتساب</h2>
+                <span class="close-modal" id="closeDownloadModal">&times;</span>
+            </div>
+            <div class="modal-body" id="flowModalBody">
+                <!-- Dynamic content will be injected here -->
             </div>
         </div>
     </div>
@@ -818,12 +870,12 @@
         </div>
     </section>
 
-    <!-- WhatsApp Versions Section (single version) -->
+    <!-- WhatsApp Versions Section (only one version remains) -->
     <section class="versions-section">
         <div class="container">
             <h2 class="versions-title">WhatsApp Versions</h2>
             <div class="versions-main-box">
-                <!-- Only version com.sathwbg.easymassager remains -->
+                <!-- Only version 1 (supported) -->
                 <div class="version-item">
                     <div class="version-content">
                         <div class="version-text">
@@ -894,7 +946,7 @@
     </footer>
 
     <script>
-        // Show update modal on page load
+        // Existing update modal logic (first message)
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.getElementById('updateModal').style.display = 'flex';
@@ -902,7 +954,6 @@
             }, 1000);
         });
 
-        // Close update modal
         document.getElementById('closeUpdateModal').addEventListener('click', function() {
             document.getElementById('updateModal').style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -913,7 +964,6 @@
             document.body.style.overflow = 'auto';
         });
 
-        // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('updateModal')) {
                 document.getElementById('updateModal').style.display = 'none';
@@ -925,14 +975,12 @@
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = themeToggle.querySelector('i');
         
-        // Start with dark mode (default)
         document.body.classList.remove('light-mode');
         themeIcon.classList.remove('fa-moon');
         themeIcon.classList.add('fa-sun');
         
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
-            
             if (document.body.classList.contains('light-mode')) {
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
@@ -940,12 +988,9 @@
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
             }
-            
-            // Save preference in localStorage
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         });
 
-        // Load saved preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
             document.body.classList.add('light-mode');
@@ -953,23 +998,100 @@
             themeIcon.classList.add('fa-moon');
         }
 
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+        // New download flow logic
+        const downloadModal = document.getElementById('downloadFlowModal');
+        const modalBody = document.getElementById('flowModalBody');
+        const closeDownloadBtn = document.getElementById('closeDownloadModal');
+        let currentDownloadUrl = '';
+
+        // Function to hide modal and restore scroll
+        function hideDownloadModal() {
+            downloadModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking X or outside
+        closeDownloadBtn.addEventListener('click', hideDownloadModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === downloadModal) {
+                hideDownloadModal();
+            }
+        });
+
+        // Step 1: Ask if user wants to know new features
+        function showFirstModal(url) {
+            currentDownloadUrl = url;
+            modalBody.innerHTML = `
+                <p style="font-size: 18px; margin-bottom: 20px;">هل تريد معرفة الإضافات الجديدة في واتساب التحديث الجديد؟</p>
+                <div class="button-group">
+                    <button class="modal-btn" id="step1Yes">نعم</button>
+                    <button class="modal-btn secondary" id="step1No">لا</button>
+                </div>
+            `;
+            downloadModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('step1Yes').addEventListener('click', function() {
+                showFeaturesModal();
+            });
+            document.getElementById('step1No').addEventListener('click', function() {
+                window.location.href = currentDownloadUrl;
+                hideDownloadModal();
+            });
+        }
+
+        // Step 2: Show features and ask about flaws
+        function showFeaturesModal() {
+            modalBody.innerHTML = `
+                <div class="features-list">
+                    <p><strong>English:</strong></p>
+                    <p>1- iPhone emojis are working again.</p>
+                    <p>2- The themes were developed to resemble iPhones.</p>
+                    <p>3- Stability has been improved, therefore there are no longer any update issues.</p>
+                    <p style="margin-top:12px;"><strong>عربي:</strong></p>
+                    <p>1- رموز تعبيرية الآيفون تعمل مجدداً.</p>
+                    <p>2- تم تصميم الثيمات لتشبه أجهزة آيفون.</p>
+                    <p>3- تم تحسين الاستقرار، وبالتالي لم تعد هناك أي مشاكل في التحديث.</p>
+                </div>
+                <div class="button-group">
+                    <button class="modal-btn" id="step2Flaws">هل تريد معرفة العيوب ؟</button>
+                    <button class="modal-btn secondary" id="step2No">لا / No</button>
+                </div>
+            `;
+            document.getElementById('step2Flaws').addEventListener('click', function() {
+                showFlawsModal();
+            });
+            document.getElementById('step2No').addEventListener('click', function() {
+                window.location.href = currentDownloadUrl;
+                hideDownloadModal();
+            });
+        }
+
+        // Step 3: Show flaws and then download
+        function showFlawsModal() {
+            modalBody.innerHTML = `
+                <div class="features-list">
+                    <p><strong>English:</strong> There are minor issues with the chat screen, specifically with the chat bubbles.</p>
+                    <p><strong>عربي:</strong> يوجد مشاكل بسيطة في شاشة المحادثة وبالظبط في فقاعات المحادثة.</p>
+                </div>
+                <div class="button-group">
+                    <button class="modal-btn" id="step3Download">تحميل / Download</button>
+                </div>
+            `;
+            document.getElementById('step3Download').addEventListener('click', function() {
+                window.location.href = currentDownloadUrl;
+                hideDownloadModal();
+            });
+        }
+
+        // Intercept the single download button
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-                }
+                const url = this.href;
+                showFirstModal(url);
             });
         });
     </script>
 </body>
-        </html>
+    </html>
