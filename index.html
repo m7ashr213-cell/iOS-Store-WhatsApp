@@ -625,16 +625,11 @@
             text-align: center;
         }
 
-        .update-modal-body h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-
         .update-modal-body p {
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.7;
             margin-bottom: 15px;
+            color: var(--text-color);
         }
 
         .update-modal-body .highlight {
@@ -768,18 +763,19 @@
     </style>
 </head>
 <body>
-    <!-- Update Notification Modal - Keep in Arabic -->
+    <!-- Update Notification Modal - Updated message in Arabic -->
     <div class="update-modal" id="updateModal">
         <div class="update-modal-content">
             <div class="update-modal-header">
-                <h2>تحديث مهم لكل المستخدمين</h2>
+                <h2>إشعار هام</h2>
                 <span class="close-update-modal" id="closeUpdateModal">&times;</span>
             </div>
             <div class="update-modal-body">
-                <h3>التحديث للنسخة القديمة</h3>
-                <p>لكل المستخدمين القدام التحديث للنسخة القديمة هو:</p>
+                <p>عفوا نتأسف لكل أعضاء واتساب لكن تم ايقاف تحديث باقي الاصدارات من واتساب وهي:</p>
+                <div class="highlight">com.ios.whatsapp<br>com.whatsapp.prim</div>
+                <p>والإصدار الذي سيتم العمل عليه دائما هو:</p>
                 <div class="highlight">com.sathwbg.easymassager</div>
-                <p>وتم اضافة نسختين اخرتين لكل من يريد اضافة واتساب اخر عنده</p>
+                <p>شكرا لتفهمكم</p>
                 <button class="ok-btn" id="okUpdateBtn">موافق</button>
             </div>
         </div>
@@ -822,12 +818,12 @@
         </div>
     </section>
 
-    <!-- WhatsApp Versions Section -->
+    <!-- WhatsApp Versions Section (single version) -->
     <section class="versions-section">
         <div class="container">
             <h2 class="versions-title">WhatsApp Versions</h2>
             <div class="versions-main-box">
-                <!-- Version 1 -->
+                <!-- Only version com.sathwbg.easymassager remains -->
                 <div class="version-item">
                     <div class="version-content">
                         <div class="version-text">
@@ -835,30 +831,6 @@
                         </div>
                     </div>
                     <a href="https://www.mediafire.com/file/omfedkp3oc52ise/WhatsApp_com.sathwbg.easymessager.apk/file" class="download-btn" target="_blank">
-                        Download
-                    </a>
-                </div>
-                
-                <!-- Version 2 -->
-                <div class="version-item">
-                    <div class="version-content">
-                        <div class="version-text">
-                            <span class="version-id">com.ios.whatsapp</span>
-                        </div>
-                    </div>
-                    <a href="https://www.mediafire.com/file/hyvog8kgjcdcakv/WhatsApp_com.ios.whatsapp.apk/file" class="download-btn" target="_blank">
-                        Download
-                    </a>
-                </div>
-                
-                <!-- Version 3 -->
-                <div class="version-item">
-                    <div class="version-content">
-                        <div class="version-text">
-                            <span class="version-id">com.whatsapp.prim</span>
-                        </div>
-                    </div>
-                    <a href="https://www.mediafire.com/file/xlhdg11ipvuyrv7/WhatsApp_com.whatsapp.prim.apk/file" class="download-btn" target="_blank">
                         Download
                     </a>
                 </div>
@@ -1000,4 +972,4 @@
         });
     </script>
 </body>
-</html>
+        </html>
